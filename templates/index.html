@@ -1,0 +1,252 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SS India Roofing</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+    <div class="top-bar">
+        <div>Mon-Fri 09:00-17:00</div>
+        <div>+91 XXXXXXXXXX</div>
+        <div class="social">
+            <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="#"><i class="fa-brands fa-linkedin-in"></i></a>
+            <a href="#"><i class="fa-brands fa-instagram"></i></a>
+            <a href="#"><i class="fa-brands fa-whatsapp"></i></a>
+        </div>
+    </div>
+
+    <header>
+        <div class="logo">
+            <span class="logo-mark"> <img src="https://ssindiaroofing.com/assets/images/logo-1.png" alt="SS India Roofing Logo"></span>
+        </div>
+
+        <nav>
+            <a href="#">Home</a>
+            <a href="#about">About Us</a>
+            <a href="#products">Our Products</a>
+            <a href="#contact">Contact Us</a>
+        </nav>
+    </header>
+
+    <section class="sec1">
+        <div class="sec1-content">
+            <p class="blue-text">WE ARE READY TO HELP YOU</p>
+            <h2>FIRST ROOFING SHEET MANUFACTURING<br>
+                COMPANY TO INTRODUCE PROFILE SHEET<br>
+                MACHINES IN MADURAI 8 YEARS</h2>
+            <p>
+                Our pioneering spirit has revolutionized the roofing industry in the region,
+                offering innovative solutions that combine durability, aesthetic appeal,
+                and cost-effectiveness.
+            </p>
+            <a class="button" href="#contact">CONTACT US</a>
+        </div>
+    </section>
+
+    <!-- Callback Strip -->
+    <section class="callback-strip">
+        <div>
+            <h3>Request a call back right now?</h3>
+            <p>We'll get back to you in 24 hours.</p>
+        </div>
+        <a class="outline-button" href="#contact">CONTACT US</a>
+    </section>
+
+    <!-- Products -->
+    <section class="products section" id="products">
+        <h2>Our <span>Products</span></h2>
+
+        <div class="product-grid">
+            <div class="product-card">
+                <div class="product-image "> <img src="https://ssindiaroofing.com/assets/images/products/Profile%20Sheets.webp" alt="PROFILE SHEET"> </div>
+                <div class="card-content">
+                    <h3>PROFILE SHEET</h3>
+                    <p>
+                        Discover the durability and style of our premium profile sheets,
+                        designed to provide top-notch protection and aesthetic appeal.
+                    </p>
+                    <a class="button" href="#">VIEW PRODUCT</a>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image "> <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2F5.imimg.com%2Fdata5%2FSELLER%2FDefault%2F2022%2F9%2FXO%2FHO%2FWX%2F35935689%2F2-mm-galvanized-sheet-500x500.jpg&f=1&nofb=1&ipt=4680fc9a6d44a1531316bc894fc5fd16d127b47b287d34ae884b0f2765fd22fe" alt="LINER SHEET"> </div>
+                <div class="card-content">
+                    <h3>LINER SHEET</h3>
+                    <p>
+                        Ensure superior protection and a sleek finish with our Liner Sheets,
+                        designed for enhanced durability and performance.
+                    </p>
+                    <a class="button" href="#">VIEW PRODUCT</a>
+                </div>
+            </div>
+            <div class="product-card">
+                <div class="product-image "> <img src="https://ssindiaroofing.com/assets/images/products/Polycarbonate%20sheets.jpeg" alt="POLYCARBONATE SHEET"> </div>
+                <div class="card-content">
+                    <h3>POLYCARBONATE SHEET</h3>
+                    <p>
+                        Achieve outstanding clarity and strength with our Polycarbonate Sheets,
+                        offering exceptional durability and UV protection.
+                    </p>
+                    <a class="button" href="#">VIEW PRODUCT</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About -->
+    <section class="about section" id="about">
+        <div class="about-image"></div>
+        <div class="about-text">
+            <small>WHO WE ARE</small>
+            <h2>Get to know about <span>our company</span></h2>
+            <p>
+                Welcome to SS India Roofing! SS India Roofing is proud to be a pioneer in
+                the roofing sheet manufacturing industry in Madurai. With years of experience
+                since our inception, we have been committed to delivering top-notch quality,
+                superior materials, and fair pricing to the Indian market.
+            </p>
+            <a class="button" href="#">ABOUT US</a>
+        </div>
+    </section>
+
+    <!-- Contact -->
+
+    <section class="contact section" id="contact">
+
+        <h2>Book an <span>appointment NOW!</span></h2>
+
+        <form class="appointment-form">
+
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="first-name">First Name</label>
+                    <input
+                        type="text"
+                        id="first-name"
+                        name="first_name"
+                        placeholder="Enter your first name"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="last-name">Last Name</label>
+                    <input
+                        type="text"
+                        id="last-name"
+                        name="last_name"
+                        placeholder="Enter your last name"
+                        required
+                    >
+                </div>
+            </div>
+
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="city">City</label>
+                    <input
+                        type="text"
+                        id="city"
+                        name="city"
+                        placeholder="Enter your city"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input
+                        type="tel"
+                        id="phone"
+                        name="phone"
+                        placeholder="Enter your phone number"
+                        pattern="[0-9]{10}"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="Enter your email"
+                        required
+                    >
+                </div>
+            </div>
+
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="date">Preferred Date</label>
+                    <input
+                        type="date"
+                        id="date"
+                        name="date"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="time">Preferred Time</label>
+                    <input
+                        type="time"
+                        id="time"
+                        name="time"
+                        required
+                    >
+                </div>
+
+
+                <div class="form-group">
+                    <label for="service">Roofing Service</label>
+
+                    <select id="service" name="service" required>
+                        <option value="" disabled selected>
+                            Select a service
+                        </option>
+                        <option value="profile-sheet">
+                            Profile Sheet
+                        </option>
+                        <option value="linear-sheet">
+                            Linear Sheet
+                        </option>
+                        <option value="polycarbonate-sheet">
+                            Polycarbonate Sheet
+                        </option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group full-width">
+                <label for="message">Additional Requirements</label>
+
+                <textarea
+                    id="message"
+                    name="message"
+                    placeholder="Tell us about your roofing requirements..."
+                ></textarea>
+            </div>
+
+
+            <button class="button" type="submit">
+                BOOK APPOINTMENT
+            </button>
+
+        </form>
+        <script src="{% static 'js/script.js' %}"></script>
+    </section>
+
+</body>
+</html>
