@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Appointments | SS India Roofing</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<nav class="navbar navbar-expand-lg navbar-dark" style="background:#2053a3">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="{% url 'home' %}">
+            SS INDIA ROOFING
+        </a>
+        <div class="d-flex gap-2">
+            <a href="{% url 'home' %}" class="btn btn-outline-light btn-sm">
+                Visit Website
+            </a>
+        </div>
+    </div>
+</nav>
+
+<main class="container py-5">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+        <div>
+            <p class="text-primary fw-semibold mb-1">ADMINISTRATION</p>
+            <h1 class="fw-bold mb-1">Appointment Management</h1>
+            <p class="text-secondary mb-0">View and manage customer appointment requests.</p>
+        </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="card border-0 shadow-sm rounded-4 mb-4">
+        <div class="card-body">
+            <form method="GET" class="row g-3">
+                <div class="col-md-4">
+                    <label for="status" class="form-label fw-semibold">Filter by Status</label>
+                    <select name="status" id="status" class="form-select">
+                        <option value="">All Statuses</option>
+                        {% for value, label in status_choices %}
+                        <option value="{{ value }}" {% if current_status == value %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="search" class="form-label fw-semibold">Search</label>
+                    <input type="text" name="search" id="search" class="form-control" placeholder="Search by name, email, phone..." value="{{ search_query }}">
+                </div>
+                <div class="col-md-4 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary w-100">Apply Filters</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Appointments Table -->
+    <div class="card border-0 shadow-sm rounded-4">
+        <div class="card-body p-0">
+            {% if page_obj %}
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead style="background:#2053a3; color:white;">
+                        <tr>
+                            <th>Customer</th>
+                            <th>Contact</th>
+                            <th>Date & Time</th>
+                            <th>Service</th>
+                            <th>Status</th>
+                            <th>Created</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for appointment in page_obj %}
+                        <tr>
+                            <td>
+                                <strong>{{ appointment.first_name }} {{ appointment.last_name }}</strong><br>
+                                <small class="text-secondary">{{ appointment.city }}</small>
+                            </td>
+                            <td>
+                                {{ appointment.email }}<br>
+                                <small>{{ appointment.phone }}</small>
+                            </td>
+                            <td>
+                                {{ appointment.date }}<br>
+                                <small>{{ appointment.time }}</small>
+                            </td>
+                            <td>{{ appointment.get_service_display }}</td>
+                            <td>
+                                <span class="badge
+                                    {% if appointment.status == 'pending' %}bg-warning text-dark
+                                    {% elif appointment.status == 'confirmed' %}bg-info
+                                    {% elif appointment.status == 'completed' %}bg-success
+                                    {% elif appointment.status == 'cancelled' %}bg-danger
+                                    {% else %}bg-secondary{% endif %}">
+                                    {{ appointment.get_status_display }}
+                                </span>
+                            </td>
+                            <td>{{ appointment.created_at|date:"M d, Y H:i" }}</td>
+                            <td>
+                                <div class="btn-group btn-group-sm">
+                                    <a href="{% url 'appointment_detail' appointment.pk %}" class="btn btn-outline-primary" title="View">
+                                        <i class="fa-solid fa-eye"></i>
+                                    </a>
+                                    <a href="{% url 'appointment_update' appointment.pk %}" class="btn btn-outline-warning" title="Update Status">
+                                        <i class="fa-solid fa-pen"></i>
+                                    </a>
+                                    <a href="{% url 'appointment_delete' appointment.pk %}" class="btn btn-outline-danger" title="Delete">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            {% if page_obj.has_other_pages %}
+            <nav class="px-4 py-3" aria-label="Appointment pagination">
+                <ul class="pagination justify-content-center mb-0">
+                    {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1{% if current_status %}&status={{ current_status }}{% endif %}{% if search_query %}&search={{ search_query }}{% endif %}">&laquo; First</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if current_status %}&status={{ current_status }}{% endif %}{% if search_query %}&search={{ search_query }}{% endif %}">Previous</a>
+                    </li>
+                    {% else %}
+                    <li class="page-item disabled"><span class="page-link">&laquo; First</span></li>
+                    <li class="page-item disabled"><span class="page-link">Previous</span></li>
+                    {% endif %}
+
+                    <li class="page-item disabled">
+                        <span class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+                    </li>
+
+                    {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if current_status %}&status={{ current_status }}{% endif %}{% if search_query %}&search={{ search_query }}{% endif %}">Next</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if current_status %}&status={{ current_status }}{% endif %}{% if search_query %}&search={{ search_query }}{% endif %}">Last &raquo;</a>
+                    </li>
+                    {% else %}
+                    <li class="page-item disabled"><span class="page-link">Next</span></li>
+                    <li class="page-item disabled"><span class="page-link">Last &raquo;</span></li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+            {% else %}
+            <div class="text-center p-5">
+                <i class="fa-solid fa-calendar-check display-4 text-secondary mb-3"></i>
+                <h4>No appointments found</h4>
+                <p class="text-secondary">No appointment requests have been submitted yet.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</main>
+
+<footer class="text-center text-secondary py-4">
+    <small>© SS India Roofing | Appointment Administration</small>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/js/all.min.js"></script>
+</body>
+</html>

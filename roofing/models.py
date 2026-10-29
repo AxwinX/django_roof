@@ -12,8 +12,8 @@ class Product(models.Model):
     image = models.URLField()
     product_type = models.CharField(max_length=30, choices=PRODUCT_TYPES, default='profile-sheet')
     is_active = models.BooleanField(default=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True)
 
     def __str__(self):
         return self.name
@@ -44,8 +44,8 @@ class Appointment(models.Model):
     service = models.CharField(max_length=30, choices=SERVICE_CHOICES)
     message = models.TextField(blank=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True)
 
     def __str__(self):
         return f"{self.first_name} {self.last_name} - {self.date} {self.time} ({self.status})"
