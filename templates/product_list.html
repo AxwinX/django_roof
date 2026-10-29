@@ -1,0 +1,99 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Products | SS India Roofing</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<nav class="navbar navbar-expand-lg navbar-dark" style="background:#2053a3">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="{% url 'home' %}">
+            SS INDIA ROOFING
+        </a>
+        <a href="{% url 'home' %}" class="btn btn-outline-light btn-sm">
+            Visit Website
+        </a>
+    </div>
+</nav>
+
+<main class="container py-5">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+        <div>
+            <p class="text-primary fw-semibold mb-1">ADMINISTRATION</p>
+            <h1 class="fw-bold mb-1">Product Management</h1>
+            <p class="text-secondary mb-0">Manage your roofing products in one place.</p>
+        </div>
+        <a href="{% url 'product_create' %}" class="btn btn-primary btn-lg">
+            + Add Product
+        </a>
+    </div>
+
+    <div class="card border-0 shadow-sm rounded-4 mb-4">
+        <div class="card-body p-4">
+            <h5 class="mb-1">Your product catalogue</h5>
+            <p class="text-secondary mb-0">
+                Total products: {{ products|length }}
+            </p>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        {% for product in products %}
+        <div class="col-sm-6 col-lg-4">
+            <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden">
+                {% if product.image %}
+                <img src="{{ product.image.url }}"
+                     class="card-img-top"
+                     alt="{{ product.name }}"
+                     style="height:220px;object-fit:cover">
+                {% else %}
+                <div class="bg-body-secondary d-flex align-items-center justify-content-center"
+                     style="height:220px">
+                    <span class="text-secondary">No product image</span>
+                </div>
+                {% endif %}
+
+                <div class="card-body p-4">
+                    <h5 class="card-title fw-bold">{{ product.name }}</h5>
+                    <p class="card-text text-secondary">
+                        {{ product.description|default:"No description added."|truncatewords:25 }}
+                    </p>
+
+                    <div class="d-flex gap-2 mt-3">
+                        <a href="{% url 'product_update' product.pk %}"
+                           class="btn btn-outline-primary flex-fill">
+                            Edit
+                        </a>
+                        <a href="{% url 'product_delete' product.pk %}"
+                           class="btn btn-outline-danger flex-fill">
+                            Delete
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="card border-0 shadow-sm rounded-4 text-center p-5">
+                <h4>No products yet</h4>
+                <p class="text-secondary">Add your first roofing product to get started.</p>
+                <a href="{% url 'product_create' %}" class="btn btn-primary mx-auto">
+                    Add Your First Product
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</main>
+
+<footer class="text-center text-secondary py-4">
+    <small>© SS India Roofing | Product Administration</small>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

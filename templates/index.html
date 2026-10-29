@@ -6,6 +6,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SS India Roofing</title>
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
@@ -27,10 +31,11 @@
         </div>
 
         <nav>
-            <a href="#">Home</a>
-            <a href="#about">About Us</a>
-            <a href="#products">Our Products</a>
-            <a href="#contact">Contact Us</a>
+            <a href="#" style="padding-top: 1rem;">Home</a>
+            <a href="#about"style="padding-top: 1rem;">About Us</a>
+            <a href="#products" style="padding-top: 1rem;">Our Products</a>
+            <a href="#contact" style="padding-top: 1rem;">Contact Us</a>
+            <a href="http://127.0.0.1:8000/admin" class="button" style="margin: 1rem;">Admin Login</a>
         </nav>
     </header>
 
@@ -63,40 +68,19 @@
         <h2>Our <span>Products</span></h2>
 
         <div class="product-grid">
+            {% for product in products%}
             <div class="product-card">
-                <div class="product-image "> <img src="https://ssindiaroofing.com/assets/images/products/Profile%20Sheets.webp" alt="PROFILE SHEET"> </div>
+                <div class="product-image "> <img src="{{ product.image }}" alt="{{ product.name }}"> </div>
                 <div class="card-content">
-                    <h3>PROFILE SHEET</h3>
+                    <h3>{{ product.name }}</h3>
                     <p>
-                        Discover the durability and style of our premium profile sheets,
-                        designed to provide top-notch protection and aesthetic appeal.
+                        {{ product.description }}
+                    
                     </p>
                     <a class="button" href="#">VIEW PRODUCT</a>
                 </div>
             </div>
-
-            <div class="product-card">
-                <div class="product-image "> <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2F5.imimg.com%2Fdata5%2FSELLER%2FDefault%2F2022%2F9%2FXO%2FHO%2FWX%2F35935689%2F2-mm-galvanized-sheet-500x500.jpg&f=1&nofb=1&ipt=4680fc9a6d44a1531316bc894fc5fd16d127b47b287d34ae884b0f2765fd22fe" alt="LINER SHEET"> </div>
-                <div class="card-content">
-                    <h3>LINER SHEET</h3>
-                    <p>
-                        Ensure superior protection and a sleek finish with our Liner Sheets,
-                        designed for enhanced durability and performance.
-                    </p>
-                    <a class="button" href="#">VIEW PRODUCT</a>
-                </div>
-            </div>
-            <div class="product-card">
-                <div class="product-image "> <img src="https://ssindiaroofing.com/assets/images/products/Polycarbonate%20sheets.jpeg" alt="POLYCARBONATE SHEET"> </div>
-                <div class="card-content">
-                    <h3>POLYCARBONATE SHEET</h3>
-                    <p>
-                        Achieve outstanding clarity and strength with our Polycarbonate Sheets,
-                        offering exceptional durability and UV protection.
-                    </p>
-                    <a class="button" href="#">VIEW PRODUCT</a>
-                </div>
-            </div>
+            {% endfor %}
         </div>
     </section>
 
@@ -122,9 +106,15 @@
 
         <h2>Book an <span>appointment NOW!</span></h2>
 
-        <form class="appointment-form">
+        {% if messages %}
+            {% for message in messages %}
+                <p class="form-message">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
 
-
+        <form class="appointment-form" method="post" action="{% url 'home' %}#contact">
+            {% csrf_token %}
+            
             <div class="form-row">
                 <div class="form-group">
                     <label for="first-name">First Name</label>
@@ -247,6 +237,7 @@
         </form>
         <script src="{% static 'js/script.js' %}"></script>
     </section>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>

@@ -58,13 +58,19 @@ header {
 }
 
 nav {
-    display: flex;
-    gap: 30px;
+    /* display: flex; */
+    /* gap: 30px; */
     font-size: 12px;
+    /* justify-content: center; */
+    /* align-items: center; */
+
 }
 
 nav a:hover {
     color: #2053a3;
+}
+nav a{
+    padding-top:1rem;
 }
 
 .sec1 {

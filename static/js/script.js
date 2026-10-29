@@ -1,5 +1,7 @@
 const form = document.querySelector(".appointment-form");
 
+
+
 form.addEventListener("submit", function (event) {
 
     const firstName = document.getElementById("first-name").value.trim();
