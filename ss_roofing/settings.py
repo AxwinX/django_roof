@@ -30,6 +30,10 @@ ALLOWED_HOSTS = ["localhost", "127.0.0.1", "ssroofing.pythonanywhere.com"]
 
 # Application definition
 
+# LOGIN_URL = '/login/'   # Redirect to login page if user is not authenticated
+# LOG
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' | to collect all the email id who all are requesting the website
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
