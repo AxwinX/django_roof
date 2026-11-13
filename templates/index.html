@@ -31,11 +31,30 @@
         </div>
 
         <nav>
-            <a href="#" style="padding-top: 1rem;">Home</a>
-            <a href="#about"style="padding-top: 1rem;">About Us</a>
+            <a href="{% url 'home' %}" style="padding-top: 1rem;">Home</a>
+            <a href="#about" style="padding-top: 1rem;">About Us</a>
             <a href="#products" style="padding-top: 1rem;">Our Products</a>
             <a href="#contact" style="padding-top: 1rem;">Contact Us</a>
-            <a href="http://127.0.0.1:8000/admin" class="button" style="margin: 1rem;">Admin Login</a>
+            {% if user.is_authenticated %}
+                <div class="dropdown" style="position: relative; display: inline-block; margin-left: 1rem;">
+                    <button class="button dropdown-toggle" style="background: transparent; color: #2053a3; border: 1px solid #2053a3; padding: 8px 16px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px;" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        {% if user.profile.image %}
+                            <img src="{{ user.profile.image.url }}" alt="" style="width:22px;height:22px;border-radius:50%;object-fit:cover;">
+                        {% else %}
+                            <i class="fa-solid fa-user"></i>
+                        {% endif %}
+                        {{ user.username }}
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" style="min-width: 180px; border: 1px solid #2053a3; border-radius: 8px; box-shadow: 0 4px 12px rgba(32, 83, 163, 0.15); margin-top: 8px;">
+                        <li><a class="dropdown-item" href="{% url 'profile' %}" style="color: #2053a3; padding: 10px 16px; font-size: 13px; display: flex; align-items: center; gap: 8px;"><i class="fa-solid fa-user"></i> Profile</a></li>
+                        <li><hr class="dropdown-divider" style="border-color: #e0e0e0;"></li>
+                        <li><a class="dropdown-item" href="{% url 'logout' %}" style="color: #dc3545; padding: 10px 16px; font-size: 13px; display: flex; align-items: center; gap: 8px;"><i class="fa-solid fa-right-from-bracket"></i> Logout</a></li>
+                    </ul>
+                </div>
+            {% else %}
+                <a href="{% url 'login' %}" class="button" style="margin-left: 1rem;">Login</a>
+            {% endif %}
+            <a href="http://127.0.0.1:8000/admin" class="button" style="margin-left: 1rem;">Admin Login</a>
         </nav>
     </header>
 

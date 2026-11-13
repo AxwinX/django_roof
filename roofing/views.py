@@ -1,9 +1,12 @@
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test, login_required
+from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.core.paginator import Paginator
-from .models import Product, Appointment, Enquiry, Service
-from .forms import AppointmentForm, ProductForm, EnquiryForm, ServiceForm
+from .models import Product, Appointment, Enquiry, Service, Profile
+from .forms import AppointmentForm, ProductForm, EnquiryForm, ServiceForm, ProfileImageForm
+from django.views.decorators.http import require_POST
 
 
 def home(request):
@@ -97,9 +100,9 @@ def product_delete(request, pk):
     })
 
 
-# =============================
-# Appointment Management (Staff Only)
-# =============================
+
+# Appointment Management
+
 
 @user_passes_test(staff_required)
 def appointment_list(request):
@@ -170,9 +173,9 @@ def appointment_delete(request, pk):
     })
 
 
-# =============================
-# Enquiry Management (Staff Only)
-# =============================
+
+# Enquiry Management (Staff)
+
 
 @user_passes_test(staff_required)
 def enquiry_list(request):
@@ -244,9 +247,7 @@ def enquiry_delete(request, pk):
     })
 
 
-# =============================
-# Service Management (Staff Only)
-# =============================
+# Service operations
 
 @user_passes_test(staff_required)
 def service_list(request):
@@ -298,3 +299,84 @@ def service_delete(request, pk):
     return render(request, "service_confirm_deletion.html", {
         "service": service
     })
+
+
+
+def signup_view(request):
+    if request.user.is_authenticated:
+        return redirect('home')
+
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            messages.success(request, "Account created successfully! Welcome to SS India Roofing.")
+            return redirect('home')
+        else:
+            messages.error(request, "Please correct the errors below.")
+    else:
+        form = UserCreationForm()
+
+    return render(request, 'signup.html', {'form': form})
+
+
+def login_view(request):
+    if request.user.is_authenticated:
+        return redirect('home')
+
+    if request.method == 'POST':
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                messages.success(request, f"Welcome back, {username}!")
+                next_url = request.GET.get('next', 'home')
+                return redirect(next_url)
+        else:
+            messages.error(request, "Invalid username or password.")
+    else:
+        form = AuthenticationForm()
+
+    return render(request, 'login.html', {'form': form})
+
+
+def logout_view(request):
+    logout(request)
+    messages.success(request, "You have been logged out successfully.")
+    return redirect('home')
+
+
+# Profile Management
+
+@login_required
+def profile_view(request):
+    profile, _ = Profile.objects.get_or_create(user=request.user)
+
+    if request.method == "POST":
+        form = ProfileImageForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Profile image updated successfully!")
+            return redirect("profile")
+        # validation errors are shown inline by the template
+    else:
+        form = ProfileImageForm(instance=profile)
+
+    return render(request, "profile.html", {"form": form, "profile": profile})
+
+
+@login_required
+@require_POST
+def profile_image_delete(request):
+    profile, _ = Profile.objects.get_or_create(user=request.user)
+    if profile.image:
+        profile.delete_image_file()
+        profile.save()
+        messages.success(request, "Profile image removed.")
+    else:
+        messages.info(request, "You don't have a profile image to remove.")
+    return redirect("profile")

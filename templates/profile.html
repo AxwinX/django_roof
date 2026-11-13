@@ -1,0 +1,72 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile | SS India Roofing</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/profile.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <span class="logo-mark"><img src="https://ssindiaroofing.com/assets/images/logo-1.png" alt="SS India Roofing Logo"></span>
+        </div>
+        <nav>
+            <a href="{% url 'home' %}">&larr; Back to Home</a>
+        </nav>
+    </header>
+
+    <section class="profile-section">
+        <h2>My <span>Profile</span></h2>
+
+        {% for message in messages %}
+            <p class="form-message {{ message.tags }}">{{ message }}</p>
+        {% endfor %}
+
+        <div class="profile-card">
+            <div class="avatar-wrap">
+                {% if profile.image %}
+                    <img id="avatar-preview" src="{{ profile.image.url }}" alt="Profile image">
+                {% else %}
+                    <img id="avatar-preview" class="d-none" src="" alt="Profile image preview">
+                    <div id="avatar-placeholder"><i class="fa-solid fa-user"></i></div>
+                {% endif %}
+            </div>
+
+            <h3>{{ user.username }}</h3>
+
+            <form id="profile-image-form" method="post" enctype="multipart/form-data" novalidate>
+                {% csrf_token %}
+                <label for="id_image" class="upload-label">
+                    <i class="fa-solid fa-upload"></i>
+                    {% if profile.image %}Change image{% else %}Choose image{% endif %}
+                </label>
+                {{ form.image }}
+
+                <p class="hint">JPG, PNG or WebP &middot; max 2 MB &middot; 100&ndash;4000 px</p>
+                <p id="client-error" class="field-error" role="alert"></p>
+                {% for error in form.image.errors %}
+                    <p class="field-error">{{ error }}</p>
+                {% endfor %}
+
+                <button type="submit" id="upload-btn" class="button" disabled>SAVE IMAGE</button>
+            </form>
+
+            {% if profile.image %}
+            <form method="post" action="{% url 'profile_image_delete' %}"
+                  onsubmit="return confirm('Remove your profile image?');">
+                {% csrf_token %}
+                <button type="submit" class="button danger">REMOVE IMAGE</button>
+            </form>
+            {% endif %}
+        </div>
+    </section>
+
+    <script src="{% static 'js/profile.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

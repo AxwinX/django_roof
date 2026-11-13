@@ -1,5 +1,5 @@
 from django import forms
-from .models import Appointment, Product, Enquiry, Service
+from .models import Appointment, Product, Enquiry, Service, Profile
 
 
 class AppointmentForm(forms.ModelForm):
@@ -41,3 +41,19 @@ class ServiceForm(forms.ModelForm):
         widgets = {
             'description': forms.Textarea(attrs={'rows': 4}),
         }
+        
+class ProfileImageForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ["image"]
+        widgets = {
+            "image": forms.ClearableFileInput(
+                attrs={"accept": "image/jpeg,image/png,image/webp", "id": "id_image"}
+            )
+        }
+
+    def clean_image(self):
+        image = self.cleaned_data.get("image")
+        if not image:
+            raise forms.ValidationError("Please choose an image to upload.")
+        return image

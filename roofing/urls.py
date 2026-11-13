@@ -4,6 +4,11 @@ from . import views
 urlpatterns = [
     path('', views.home, name='home'),
 
+    # Authentication
+    path('signup/', views.signup_view, name='signup'),
+    path('login/', views.login_view, name='login'),
+    path('logout/', views.logout_view, name='logout'),
+
     # Product Management
     path("manage/products/", views.product_list, name="product_list"),
     path("manage/products/add/", views.product_create, name="product_create"),
@@ -53,6 +58,7 @@ urlpatterns = [
         views.enquiry_delete,
         name="enquiry_delete"
     ),
+    
 
     # Service Management
     path("manage/services/", views.service_list, name="service_list"),
@@ -67,4 +73,9 @@ urlpatterns = [
         views.service_delete,
         name="service_delete"
     ),
+    
+    # Profile Management
+    path('profile/', views.profile_view, name='profile'),
+    path('profile/image/delete/', views.profile_image_delete, name='profile_image_delete'),
+
 ]

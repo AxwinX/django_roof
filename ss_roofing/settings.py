@@ -11,9 +11,16 @@ https://docs.djangoproject.com/en/6.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Profile image upload settings
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# Optional hard cap on upload size handled in memory:
+DATA_UPLOAD_MAX_MEMORY_SIZE = 5 * 1024 * 1024
 
 
 # Quick-start development settings - unsuitable for production
@@ -30,8 +37,10 @@ ALLOWED_HOSTS = ["localhost", "127.0.0.1", "ssroofing.pythonanywhere.com"]
 
 # Application definition
 
-# LOGIN_URL = '/login/'   # Redirect to login page if user is not authenticated
-# LOG
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
+
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' | to collect all the email id who all are requesting the website
 
 INSTALLED_APPS = [
