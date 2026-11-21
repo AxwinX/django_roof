@@ -9,16 +9,7 @@
 </head>
 <body class="bg-light">
 
-<nav class="navbar navbar-expand-lg navbar-dark" style="background:#2053a3">
-    <div class="container">
-        <a class="navbar-brand fw-bold" href="{% url 'home' %}">
-            SS INDIA ROOFING
-        </a>
-        <a href="{% url 'home' %}" class="btn btn-outline-light btn-sm">
-            Visit Website
-        </a>
-    </div>
-</nav>
+{% include "_admin_nav.html" %}
 
 <main class="container py-5">
     <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
@@ -36,17 +27,17 @@
         <div class="card-body p-4">
             <h5 class="mb-1">Your product catalogue</h5>
             <p class="text-secondary mb-0">
-                Total products: {{ products|length }}
+                Total products: {{ page_obj.paginator.count }}
             </p>
         </div>
     </div>
 
     <div class="row g-4">
-        {% for product in products %}
+        {% for product in page_obj %}
         <div class="col-sm-6 col-lg-4">
             <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden">
                 {% if product.image %}
-                <img src="{{ product.image.url }}"
+                <img src="{{ product.image }}"
                      class="card-img-top"
                      alt="{{ product.name }}"
                      style="height:220px;object-fit:cover">
@@ -88,6 +79,8 @@
         </div>
         {% endfor %}
     </div>
+
+    {% include "_pagination.html" with wrapper="mt-4" %}
 </main>
 
 <footer class="text-center text-secondary py-4">

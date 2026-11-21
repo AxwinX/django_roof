@@ -8,18 +8,7 @@
 </head>
 <body class="bg-light">
 
-<nav class="navbar navbar-expand-lg navbar-dark" style="background:#2053a3">
-    <div class="container">
-        <a class="navbar-brand fw-bold" href="{% url 'home' %}">
-            SS INDIA ROOFING
-        </a>
-        <div class="d-flex gap-2">
-            <a href="{% url 'home' %}" class="btn btn-outline-light btn-sm">
-                Visit Website
-            </a>
-        </div>
-    </div>
-</nav>
+{% include "_admin_nav.html" %}
 
 <main class="container py-5">
     <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
@@ -109,40 +98,7 @@
         {% endfor %}
     </div>
 
-    <!-- Pagination -->
-    {% if page_obj.has_other_pages %}
-    <nav class="mt-4" aria-label="Service pagination">
-        <ul class="pagination justify-content-center">
-            {% if page_obj.has_previous %}
-            <li class="page-item">
-                <a class="page-link" href="?page=1">&laquo; First</a>
-            </li>
-            <li class="page-item">
-                <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
-            </li>
-            {% else %}
-            <li class="page-item disabled"><span class="page-link">&laquo; First</span></li>
-            <li class="page-item disabled"><span class="page-link">Previous</span></li>
-            {% endif %}
-
-            <li class="page-item disabled">
-                <span class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
-            </li>
-
-            {% if page_obj.has_next %}
-            <li class="page-item">
-                <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
-            </li>
-            <li class="page-item">
-                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
-            </li>
-            {% else %}
-            <li class="page-item disabled"><span class="page-link">Next</span></li>
-            <li class="page-item disabled"><span class="page-link">Last &raquo;</span></li>
-            {% endif %}
-        </ul>
-    </nav>
-    {% endif %}
+    {% include "_pagination.html" with wrapper="mt-4" %}
 </main>
 
 <footer class="text-center text-secondary py-4">

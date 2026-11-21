@@ -7,6 +7,8 @@ from django.core.paginator import Paginator
 from .models import Product, Appointment, Enquiry, Service, Profile
 from .forms import AppointmentForm, ProductForm, EnquiryForm, ServiceForm, ProfileImageForm
 from django.views.decorators.http import require_POST
+from django.db.models import Q
+from .pagination import paginate
 
 
 def home(request):
@@ -43,17 +45,30 @@ def staff_required(user):
     return user.is_staff and user.is_authenticated
 
 
+
+@user_passes_test(staff_required)
+def dashboard(request):
+    return render(request, 'dashboard.html', {
+        'appointment_total': Appointment.objects.count(),
+        'appointment_pending': Appointment.objects.filter(status='pending').count(),
+        'enquiry_total': Enquiry.objects.count(),
+        'enquiry_pending': Enquiry.objects.filter(status='pending').count(),
+        'product_total': Product.objects.count(),
+        'product_active': Product.objects.filter(is_active=True).count(),
+        'service_total': Service.objects.count(),
+        'service_active': Service.objects.filter(is_active=True).count(),
+        'recent_appointments': Appointment.objects.order_by('-created_at', '-pk')[:5],
+        'recent_enquiries': Enquiry.objects.order_by('-created_at', '-pk')[:5],
+    })
+    
 # =============================
 # Product Management (Staff Only)
 # =============================
 
 @user_passes_test(staff_required)
 def product_list(request):
-    products = Product.objects.all().order_by('-created_at')
-    paginator = Paginator(products, 10)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-    return render(request, 'product_list.html', {'page_obj': page_obj})
+    products = Product.objects.all().order_by('-created_at', '-pk')
+    return render(request, 'product_list.html', paginate(request, products, 9))
 
 
 @user_passes_test(staff_required)
@@ -106,36 +121,30 @@ def product_delete(request, pk):
 
 @user_passes_test(staff_required)
 def appointment_list(request):
-    appointments = Appointment.objects.all().order_by('-created_at')
+    appointments = Appointment.objects.all().order_by('-created_at', '-pk')
 
-    # Filter by status
-    status_filter = request.GET.get('status')
-    if status_filter:
+    status_filter = request.GET.get('status', '').strip()
+    if status_filter in dict(Appointment.STATUS_CHOICES):
         appointments = appointments.filter(status=status_filter)
+    else:
+        status_filter = ''
 
-    # Search
-    search = request.GET.get('search')
+    search = request.GET.get('search', '').strip()
     if search:
         appointments = appointments.filter(
-            first_name__icontains=search
-        ) | appointments.filter(
-            last_name__icontains=search
-        ) | appointments.filter(
-            email__icontains=search
-        ) | appointments.filter(
-            phone__icontains=search
+            Q(first_name__icontains=search)
+            | Q(last_name__icontains=search)
+            | Q(email__icontains=search)
+            | Q(phone__icontains=search)
         )
 
-    paginator = Paginator(appointments, 15)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-
-    return render(request, 'appointment_list.html', {
-        'page_obj': page_obj,
+    context = paginate(request, appointments, 10)
+    context.update({
         'status_choices': Appointment.STATUS_CHOICES,
         'current_status': status_filter,
         'search_query': search,
     })
+    return render(request, 'appointment_list.html', context)
 
 
 @user_passes_test(staff_required)
@@ -179,34 +188,29 @@ def appointment_delete(request, pk):
 
 @user_passes_test(staff_required)
 def enquiry_list(request):
-    enquiries = Enquiry.objects.all().order_by('-created_at')
+    enquiries = Enquiry.objects.all().order_by('-created_at', '-pk')
 
-    # Filter by status
-    status_filter = request.GET.get('status')
-    if status_filter:
+    status_filter = request.GET.get('status', '').strip()
+    if status_filter in dict(Enquiry.STATUS_CHOICES):
         enquiries = enquiries.filter(status=status_filter)
+    else:
+        status_filter = ''
 
-    # Search
-    search = request.GET.get('search')
+    search = request.GET.get('search', '').strip()
     if search:
         enquiries = enquiries.filter(
-            name__icontains=search
-        ) | enquiries.filter(
-            email__icontains=search
-        ) | enquiries.filter(
-            subject__icontains=search
+            Q(name__icontains=search)
+            | Q(email__icontains=search)
+            | Q(subject__icontains=search)
         )
 
-    paginator = Paginator(enquiries, 15)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-
-    return render(request, 'enquiry_list.html', {
-        'page_obj': page_obj,
+    context = paginate(request, enquiries, 10)
+    context.update({
         'status_choices': Enquiry.STATUS_CHOICES,
         'current_status': status_filter,
         'search_query': search,
     })
+    return render(request, 'enquiry_list.html', context)
 
 
 @user_passes_test(staff_required)
@@ -251,11 +255,8 @@ def enquiry_delete(request, pk):
 
 @user_passes_test(staff_required)
 def service_list(request):
-    services = Service.objects.all().order_by('-created_at')
-    paginator = Paginator(services, 10)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-    return render(request, 'service_list.html', {'page_obj': page_obj})
+    services = Service.objects.all().order_by('-created_at', '-pk')
+    return render(request, 'service_list.html', paginate(request, services, 9))
 
 
 @user_passes_test(staff_required)

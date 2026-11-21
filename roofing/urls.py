@@ -59,6 +59,8 @@ urlpatterns = [
         name="enquiry_delete"
     ),
     
+    path("manage/", views.dashboard, name="dashboard"),
+    
 
     # Service Management
     path("manage/services/", views.service_list, name="service_list"),

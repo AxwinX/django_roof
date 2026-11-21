@@ -54,7 +54,9 @@
             {% else %}
                 <a href="{% url 'login' %}" class="button" style="margin-left: 1rem;">Login</a>
             {% endif %}
-            <a href="http://127.0.0.1:8000/admin" class="button" style="margin-left: 1rem;">Admin Login</a>
+            {% if user.is_staff %}
+                <a href="{% url 'dashboard' %}" class="button" style="margin-left: 1rem;">Dashboard</a>
+            {% endif %}
         </nav>
     </header>
 
